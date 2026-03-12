@@ -673,15 +673,18 @@ void DIYables_OLED_SSD1309::display(void) {
  */
 void DIYables_OLED_SSD1309::startscrollright(uint8_t start, uint8_t stop) {
   SETWIRECLOCK;
-  static const uint8_t PROGMEM scrollList[] = {
-      SSD1309_RIGHT_HORIZONTAL_SCROLL, 0x00};
-  ssd1309_commandList(scrollList, sizeof(scrollList));
-  ssd1309_command1(start);
-  ssd1309_command1(0x00); // Frame frequency
-  ssd1309_command1(stop);
-  static const uint8_t PROGMEM scrollListEnd[] = {
-      0x00, 0xFF, SSD1309_ACTIVATE_SCROLL};
-  ssd1309_commandList(scrollListEnd, sizeof(scrollListEnd));
+  wire->beginTransmission(i2caddr);
+  WIRE_WRITE((uint8_t)0x00); // Co = 0, D/C# = 0
+  WIRE_WRITE(SSD1309_DEACTIVATE_SCROLL);
+  WIRE_WRITE(SSD1309_RIGHT_HORIZONTAL_SCROLL);
+  WIRE_WRITE((uint8_t)0x00);            // Dummy byte A
+  WIRE_WRITE(start);                     // Start page B
+  WIRE_WRITE((uint8_t)0x00);            // Frame frequency C
+  WIRE_WRITE(stop);                      // End page D
+  WIRE_WRITE((uint8_t)0x00);            // Start column offset E
+  WIRE_WRITE((uint8_t)(WIDTH - 1));     // End column offset F
+  WIRE_WRITE(SSD1309_ACTIVATE_SCROLL);
+  wire->endTransmission();
   RESWIRECLOCK;
 }
 
@@ -692,15 +695,18 @@ void DIYables_OLED_SSD1309::startscrollright(uint8_t start, uint8_t stop) {
  */
 void DIYables_OLED_SSD1309::startscrollleft(uint8_t start, uint8_t stop) {
   SETWIRECLOCK;
-  static const uint8_t PROGMEM scrollList[] = {
-      SSD1309_LEFT_HORIZONTAL_SCROLL, 0x00};
-  ssd1309_commandList(scrollList, sizeof(scrollList));
-  ssd1309_command1(start);
-  ssd1309_command1(0x00);
-  ssd1309_command1(stop);
-  static const uint8_t PROGMEM scrollListEnd[] = {
-      0x00, 0xFF, SSD1309_ACTIVATE_SCROLL};
-  ssd1309_commandList(scrollListEnd, sizeof(scrollListEnd));
+  wire->beginTransmission(i2caddr);
+  WIRE_WRITE((uint8_t)0x00); // Co = 0, D/C# = 0
+  WIRE_WRITE(SSD1309_DEACTIVATE_SCROLL);
+  WIRE_WRITE(SSD1309_LEFT_HORIZONTAL_SCROLL);
+  WIRE_WRITE((uint8_t)0x00);
+  WIRE_WRITE(start);
+  WIRE_WRITE((uint8_t)0x00);
+  WIRE_WRITE(stop);
+  WIRE_WRITE((uint8_t)0x00);            // Start column offset
+  WIRE_WRITE((uint8_t)(WIDTH - 1));     // End column offset
+  WIRE_WRITE(SSD1309_ACTIVATE_SCROLL);
+  wire->endTransmission();
   RESWIRECLOCK;
 }
 
@@ -711,19 +717,20 @@ void DIYables_OLED_SSD1309::startscrollleft(uint8_t start, uint8_t stop) {
  */
 void DIYables_OLED_SSD1309::startscrolldiagright(uint8_t start, uint8_t stop) {
   SETWIRECLOCK;
-  static const uint8_t PROGMEM scrollList1[] = {
-      SSD1309_SET_VERTICAL_SCROLL_AREA, 0x00};
-  ssd1309_commandList(scrollList1, sizeof(scrollList1));
-  ssd1309_command1(HEIGHT);
-  static const uint8_t PROGMEM scrollList2[] = {
-      SSD1309_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL, 0x00};
-  ssd1309_commandList(scrollList2, sizeof(scrollList2));
-  ssd1309_command1(start);
-  ssd1309_command1(0x00);
-  ssd1309_command1(stop);
-  static const uint8_t PROGMEM scrollListEnd[] = {
-      0x01, SSD1309_ACTIVATE_SCROLL};
-  ssd1309_commandList(scrollListEnd, sizeof(scrollListEnd));
+  wire->beginTransmission(i2caddr);
+  WIRE_WRITE((uint8_t)0x00); // Co = 0, D/C# = 0
+  WIRE_WRITE(SSD1309_DEACTIVATE_SCROLL);
+  WIRE_WRITE(SSD1309_SET_VERTICAL_SCROLL_AREA);
+  WIRE_WRITE((uint8_t)0x00);            // Top fixed rows
+  WIRE_WRITE((uint8_t)HEIGHT);          // Scroll area rows
+  WIRE_WRITE(SSD1309_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL);
+  WIRE_WRITE((uint8_t)0x00);            // Dummy byte A
+  WIRE_WRITE(start);                     // Start page B
+  WIRE_WRITE((uint8_t)0x00);            // Frame frequency C
+  WIRE_WRITE(stop);                      // End page D
+  WIRE_WRITE((uint8_t)0x01);            // Vertical offset
+  WIRE_WRITE(SSD1309_ACTIVATE_SCROLL);
+  wire->endTransmission();
   RESWIRECLOCK;
 }
 
@@ -734,19 +741,20 @@ void DIYables_OLED_SSD1309::startscrolldiagright(uint8_t start, uint8_t stop) {
  */
 void DIYables_OLED_SSD1309::startscrolldiagleft(uint8_t start, uint8_t stop) {
   SETWIRECLOCK;
-  static const uint8_t PROGMEM scrollList1[] = {
-      SSD1309_SET_VERTICAL_SCROLL_AREA, 0x00};
-  ssd1309_commandList(scrollList1, sizeof(scrollList1));
-  ssd1309_command1(HEIGHT);
-  static const uint8_t PROGMEM scrollList2[] = {
-      SSD1309_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL, 0x00};
-  ssd1309_commandList(scrollList2, sizeof(scrollList2));
-  ssd1309_command1(start);
-  ssd1309_command1(0x00);
-  ssd1309_command1(stop);
-  static const uint8_t PROGMEM scrollListEnd[] = {
-      0x01, SSD1309_ACTIVATE_SCROLL};
-  ssd1309_commandList(scrollListEnd, sizeof(scrollListEnd));
+  wire->beginTransmission(i2caddr);
+  WIRE_WRITE((uint8_t)0x00); // Co = 0, D/C# = 0
+  WIRE_WRITE(SSD1309_DEACTIVATE_SCROLL);
+  WIRE_WRITE(SSD1309_SET_VERTICAL_SCROLL_AREA);
+  WIRE_WRITE((uint8_t)0x00);
+  WIRE_WRITE((uint8_t)HEIGHT);
+  WIRE_WRITE(SSD1309_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL);
+  WIRE_WRITE((uint8_t)0x00);
+  WIRE_WRITE(start);
+  WIRE_WRITE((uint8_t)0x00);
+  WIRE_WRITE(stop);
+  WIRE_WRITE((uint8_t)0x01);            // Vertical offset
+  WIRE_WRITE(SSD1309_ACTIVATE_SCROLL);
+  wire->endTransmission();
   RESWIRECLOCK;
 }
 
