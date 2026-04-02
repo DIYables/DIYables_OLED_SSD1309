@@ -11,66 +11,17 @@ Arduino library for **SSD1309-based monochrome OLED displays** over I2C.
 - **API-compatible with Adafruit_SSD1306** for easy migration.
 - Pure Arduino API — works on **all boards** (AVR, ESP32, ESP8266, STM32, RP2040, SAMD, nRF52, …).
 
-## Installation
 
-### Arduino IDE Library Manager
+# TUTORIALS
+* [Arduino - SSD1309 OLED Display Module](https://arduinogetstarted.com/tutorials/arduino-ssd1309-oled-display)
+* [Arduino Uno R4 - SSD1309 OLED Display Module](https://newbiely.com/tutorials/arduino-uno-r4/arduino-uno-r4-ssd1309-oled-display)
+* [Arduino Nano - SSD1309 OLED Display Module](https://newbiely.com/tutorials/arduino-nano/arduino-nano-ssd1309-oled-display)
+* [Arduino Mega - SSD1309 OLED Display Module](https://newbiely.com/tutorials/arduino-mega/arduino-mega-ssd1309-oled-display)
+* [ESP32 - SSD1309 OLED Display Module](https://esp32io.com/tutorials/esp32-ssd1309-oled-display)
+* [ESP8266 - SSD1309 OLED Display Module](https://newbiely.com/tutorials/esp8266/esp8266-ssd1309-oled-display)
 
-1. Open **Sketch → Include Library → Manage Libraries…**
-2. Search for **DIYables_OLED_SSD1309**
-3. Click **Install**
 
-The library will automatically install its dependency (**Adafruit GFX Library**) if it is not already present.
-
-### Manual Installation
-
-1. Download or clone this repository.
-2. Copy the `DIYables_OLED_SSD1309` folder into your Arduino `libraries` directory.
-3. Install the [Adafruit GFX Library](https://github.com/adafruit/Adafruit-GFX-Library) if you have not already.
-
-## Wiring (I2C)
-
-| OLED Pin | Arduino Uno/Nano | ESP32 | ESP8266 |
-|----------|-----------------|-------|---------|
-| SDA      | A4              | 21    | D2 (GPIO 4) |
-| SCL      | A5              | 22    | D1 (GPIO 5) |
-| VCC      | 3.3 V / 5 V    | 3.3 V | 3.3 V  |
-| GND      | GND             | GND   | GND     |
-
-> **Note:** Most SSD1309 modules have a default I2C address of **0x3C**.
-> Some modules use **0x3D** — check your module's documentation.
-
-## Quick Start
-
-```cpp
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <DIYables_OLED_SSD1309.h>
-
-#define SCREEN_WIDTH  128
-#define SCREEN_HEIGHT  64
-#define OLED_RESET     -1       // -1 if no reset pin
-#define SCREEN_ADDRESS 0x3C
-
-DIYables_OLED_SSD1309 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
-void setup() {
-  if (!display.begin(SSD1309_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println(F("SSD1309 init failed"));
-    for (;;);
-  }
-
-  display.clearDisplay();
-  display.setTextSize(2);
-  display.setTextColor(SSD1309_PIXEL_ON);
-  display.setCursor(10, 24);
-  display.println(F("DIYables"));
-  display.display();
-}
-
-void loop() { }
-```
-
-## API Reference
+# API Reference
 
 The library mirrors the [Adafruit_SSD1306](https://github.com/adafruit/Adafruit_SSD1306) API:
 
@@ -128,16 +79,6 @@ All [Adafruit_GFX](https://learn.adafruit.com/adafruit-gfx-graphics-library) pri
 | `drawFastHLine(x, y, w, color)` | Fast horizontal line (direct buffer). |
 | `drawFastVLine(x, y, h, color)` | Fast vertical line (direct buffer). |
 
-### Scrolling (Hardware)
-
-| Method | Description |
-|--------|-------------|
-| `startscrollright(start, stop)` | Scroll right (page range 0–7). |
-| `startscrollleft(start, stop)` | Scroll left. |
-| `startscrolldiagright(start, stop)` | Diagonal scroll right. |
-| `startscrolldiagleft(start, stop)` | Diagonal scroll left. |
-| `stopscroll()` | Stop scrolling. |
-
 ### Buffer Access
 
 | Method | Description |
@@ -167,7 +108,6 @@ All [Adafruit_GFX](https://learn.adafruit.com/adafruit-gfx-graphics-library) pri
 |---------|-------------|
 | [HelloWorld](examples/HelloWorld/HelloWorld.ino) | Basic text output. |
 | [DrawShapes](examples/DrawShapes/DrawShapes.ino) | Lines, rectangles, circles, triangles. |
-| [ScrollText](examples/ScrollText/ScrollText.ino) | Hardware scrolling demo. |
 | [Bitmap](examples/Bitmap/Bitmap.ino) | Drawing a monochrome bitmap. |
 | [ContrastDim](examples/ContrastDim/ContrastDim.ino) | Contrast sweep and dim toggle. |
 
@@ -187,9 +127,24 @@ Key differences:
 - **Higher voltage range** – the SSD1309 supports up to 16 V VCC.
 - The initialisation sequence in this library sends a charge-pump command for compatibility with modules that respond to it; true SSD1309 ICs will simply ignore it.
 
-## License
+## Tested Hardware
 
-MIT License — see [LICENSE](LICENSE).
+| Board                   | Tested |
+|-------------------------|:------:|
+| Arduino Uno R3          |   ✅   |
+| [DIYables STEM V3 *(works like Arduino Uno R3)*](https://diyables.io/products/diyables-stem-v3-fully-compatible-with-arduino-uno-r3) |   ✅   |
+| Arduino Uno R4 WiFi     |   ✅   |
+| [DIYables STEM V4 IoT *(works like Arduino Uno R4 WiFi)*](https://diyables.io/products/diyables-stem-v4-iot-fully-compatible-with-arduino-uno-r4-wifi) |   ✅   |
+| [DIYables STEM V4B IoT *(works like Arduino Uno R4 WiFi)*](https://diyables.io/products/diyables-stem-v4b-iot-development-board-compatible-with-arduino-uno-r4-wifi-ra4m1-32-bit-arm-cortex-m4-with-esp32-s3-wifi-bluetooth-usb-c-for-learning-prototyping-education) |   ✅   |
+| Arduino Uno R4 Minima   |   ✅   |
+| [DIYables STEM V4 Edu *(works like Arduino Uno R4 Minima)*](https://diyables.io/stem-v4-edu) |   ✅   |
+| Arduino Mega            |   ✅   |
+| [DIYables MEGA2560 R3 *(works like Arduino Mega 2560 Rev3)*](https://diyables.io/atmega2560-board) |   ✅   |
+| Arduino Due             |   ✅    |
+| Arduino Giga            |   ✅    |
+| [DIYables ESP32 Development Board](https://diyables.io/esp32-board) |   ✅   |
+| [DIYables ESP32 S3, Uno-form factor](https://diyables.io/products/esp32-s3-development-board-with-esp32-s3-wroom-1-n16r8-wifi-bluetooth-uno-compatible-form-factor-works-with-arduino-ide) |   ✅   |
+| Other boards            |   Not yet, expected to work    |
 
 ## About DIYables
 

@@ -74,16 +74,7 @@
 #define SSD1309_SETVCOMDETECT       0xDB ///< Set VCOMH deselect level
 #define SSD1309_SETSTARTLINE        0x40 ///< Set display start line (0x40-0x7F)
 
-// --------------------------------------------------------------------------
-// Scrolling command defines
-// --------------------------------------------------------------------------
-#define SSD1309_RIGHT_HORIZONTAL_SCROLL              0x26 ///< Right scroll
-#define SSD1309_LEFT_HORIZONTAL_SCROLL               0x27 ///< Left scroll
-#define SSD1309_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL 0x29 ///< Diag right
-#define SSD1309_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL  0x2A ///< Diag left
-#define SSD1309_DEACTIVATE_SCROLL                    0x2E ///< Stop scroll
-#define SSD1309_ACTIVATE_SCROLL                      0x2F ///< Start scroll
-#define SSD1309_SET_VERTICAL_SCROLL_AREA             0xA3 ///< Scroll range
+#define SSD1309_DEACTIVATE_SCROLL 0x2E
 
 /*!
  * @brief Class for driving SSD1309-based OLED displays over I2C.
@@ -147,14 +138,6 @@ public:
 
   bool     getPixel(int16_t x, int16_t y);
   uint8_t *getBuffer(void);
-
-  // --- Scrolling ----------------------------------------------------------
-
-  void startscrollright(uint8_t start, uint8_t stop);
-  void startscrollleft(uint8_t start, uint8_t stop);
-  void startscrolldiagright(uint8_t start, uint8_t stop);
-  void startscrolldiagleft(uint8_t start, uint8_t stop);
-  void stopscroll(void);
 
   // --- Low-level command --------------------------------------------------
 

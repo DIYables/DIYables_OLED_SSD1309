@@ -20,11 +20,6 @@ dim	KEYWORD2
 drawPixel	KEYWORD2
 getPixel	KEYWORD2
 getBuffer	KEYWORD2
-startscrollright	KEYWORD2
-startscrollleft	KEYWORD2
-startscrolldiagright	KEYWORD2
-startscrolldiagleft	KEYWORD2
-stopscroll	KEYWORD2
 ssd1309_command	KEYWORD2
 setContrast	KEYWORD2
 drawFastHLine	KEYWORD2

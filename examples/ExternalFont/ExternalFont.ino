@@ -11,6 +11,22 @@
  *
  * Product page: https://diyables.io/products/2.4-inch-oled-display-module-ssd1309-128x64
  * Created by DIYables.
+ *
+ * TESTED HARDWARE
+ * - Arduino Uno R3
+ * - Arduino Uno R4 WiFi
+ * - Arduino Uno R4 Minima
+ * - Arduino Mega
+ * - Arduino Due
+ * - Arduino Giga
+ * - DIYables STEM V3: https://diyables.io/stem-v3
+ * - DIYables STEM V4 IoT: https://diyables.io/stem-v4-iot
+ * - DIYables STEM V4B IoT: https://diyables.io/stem-v4b-iot
+ * - DIYables STEM V4 Edu: https://diyables.io/stem-v4-edu
+ * - DIYables MEGA2560 R3: https://diyables.io/atmega2560-board
+ * - DIYables ESP32 Board: https://diyables.io/esp32-board
+ * - DIYables ESP32 S3, Uno-form factor: https://diyables.io/esp32-s3-uno
+ * - It is expected to work with other boards
  */
 
 #include <Wire.h>

@@ -269,7 +269,7 @@ bool DIYables_OLED_SSD1309::begin(uint8_t switchvcc, uint8_t addr,
       0x40,                        // VCOMH deselect level
       SSD1309_DISPLAYALLON_RESUME, // 0xA4 – output follows RAM
       SSD1309_NORMALDISPLAY,       // 0xA6
-      SSD1309_DEACTIVATE_SCROLL,   // 0x2E
+      SSD1309_DEACTIVATE_SCROLL,
       SSD1309_DISPLAYON            // 0xAF
   };
   ssd1309_commandList(init5, sizeof(init5));
@@ -660,111 +660,6 @@ void DIYables_OLED_SSD1309::display(void) {
 #if defined(ESP8266)
   yield();
 #endif
-}
-
-// =========================================================================
-//  SCROLLING
-// =========================================================================
-
-/*!
- * @brief  Begin a right-handed horizontal scroll.
- * @param  start  First page (0-7).
- * @param  stop   Last page (0-7).
- */
-void DIYables_OLED_SSD1309::startscrollright(uint8_t start, uint8_t stop) {
-  SETWIRECLOCK;
-  wire->beginTransmission(i2caddr);
-  WIRE_WRITE((uint8_t)0x00); // Co = 0, D/C# = 0
-  WIRE_WRITE(SSD1309_DEACTIVATE_SCROLL);
-  WIRE_WRITE(SSD1309_RIGHT_HORIZONTAL_SCROLL);
-  WIRE_WRITE((uint8_t)0x00);            // Dummy byte A
-  WIRE_WRITE(start);                     // Start page B
-  WIRE_WRITE((uint8_t)0x00);            // Frame frequency C
-  WIRE_WRITE(stop);                      // End page D
-  WIRE_WRITE((uint8_t)0x00);            // Start column offset E
-  WIRE_WRITE((uint8_t)(WIDTH - 1));     // End column offset F
-  WIRE_WRITE(SSD1309_ACTIVATE_SCROLL);
-  wire->endTransmission();
-  RESWIRECLOCK;
-}
-
-/*!
- * @brief  Begin a left-handed horizontal scroll.
- * @param  start  First page (0-7).
- * @param  stop   Last page (0-7).
- */
-void DIYables_OLED_SSD1309::startscrollleft(uint8_t start, uint8_t stop) {
-  SETWIRECLOCK;
-  wire->beginTransmission(i2caddr);
-  WIRE_WRITE((uint8_t)0x00); // Co = 0, D/C# = 0
-  WIRE_WRITE(SSD1309_DEACTIVATE_SCROLL);
-  WIRE_WRITE(SSD1309_LEFT_HORIZONTAL_SCROLL);
-  WIRE_WRITE((uint8_t)0x00);
-  WIRE_WRITE(start);
-  WIRE_WRITE((uint8_t)0x00);
-  WIRE_WRITE(stop);
-  WIRE_WRITE((uint8_t)0x00);            // Start column offset
-  WIRE_WRITE((uint8_t)(WIDTH - 1));     // End column offset
-  WIRE_WRITE(SSD1309_ACTIVATE_SCROLL);
-  wire->endTransmission();
-  RESWIRECLOCK;
-}
-
-/*!
- * @brief  Begin a diagonal scroll to the right.
- * @param  start  First page (0-7).
- * @param  stop   Last page (0-7).
- */
-void DIYables_OLED_SSD1309::startscrolldiagright(uint8_t start, uint8_t stop) {
-  SETWIRECLOCK;
-  wire->beginTransmission(i2caddr);
-  WIRE_WRITE((uint8_t)0x00); // Co = 0, D/C# = 0
-  WIRE_WRITE(SSD1309_DEACTIVATE_SCROLL);
-  WIRE_WRITE(SSD1309_SET_VERTICAL_SCROLL_AREA);
-  WIRE_WRITE((uint8_t)0x00);            // Top fixed rows
-  WIRE_WRITE((uint8_t)HEIGHT);          // Scroll area rows
-  WIRE_WRITE(SSD1309_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL);
-  WIRE_WRITE((uint8_t)0x00);            // Dummy byte A
-  WIRE_WRITE(start);                     // Start page B
-  WIRE_WRITE((uint8_t)0x00);            // Frame frequency C
-  WIRE_WRITE(stop);                      // End page D
-  WIRE_WRITE((uint8_t)0x01);            // Vertical offset
-  WIRE_WRITE(SSD1309_ACTIVATE_SCROLL);
-  wire->endTransmission();
-  RESWIRECLOCK;
-}
-
-/*!
- * @brief  Begin a diagonal scroll to the left.
- * @param  start  First page (0-7).
- * @param  stop   Last page (0-7).
- */
-void DIYables_OLED_SSD1309::startscrolldiagleft(uint8_t start, uint8_t stop) {
-  SETWIRECLOCK;
-  wire->beginTransmission(i2caddr);
-  WIRE_WRITE((uint8_t)0x00); // Co = 0, D/C# = 0
-  WIRE_WRITE(SSD1309_DEACTIVATE_SCROLL);
-  WIRE_WRITE(SSD1309_SET_VERTICAL_SCROLL_AREA);
-  WIRE_WRITE((uint8_t)0x00);
-  WIRE_WRITE((uint8_t)HEIGHT);
-  WIRE_WRITE(SSD1309_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL);
-  WIRE_WRITE((uint8_t)0x00);
-  WIRE_WRITE(start);
-  WIRE_WRITE((uint8_t)0x00);
-  WIRE_WRITE(stop);
-  WIRE_WRITE((uint8_t)0x01);            // Vertical offset
-  WIRE_WRITE(SSD1309_ACTIVATE_SCROLL);
-  wire->endTransmission();
-  RESWIRECLOCK;
-}
-
-/*!
- * @brief  Stop any active scrolling.
- */
-void DIYables_OLED_SSD1309::stopscroll(void) {
-  SETWIRECLOCK;
-  ssd1309_command1(SSD1309_DEACTIVATE_SCROLL);
-  RESWIRECLOCK;
 }
 
 // =========================================================================
